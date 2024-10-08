@@ -47,7 +47,7 @@ const map=[[1,1,1,1,1,1,1,1,1,1,1,1],
     // c.arc(this.position.x,this.position.y,10,0,Math.PI*2);
     // c.fill();
     
-    c.drawImage(this.image,40+128*(this.f%6),65,55,65,this.position.x,this.position.y,40,50);
+    c.drawImage(this.image,40+128*(this.f%6),62,55,65,this.position.x,this.position.y,40,50);
     
     this.c=this.c+1;
     if(this.c%5==0){
@@ -150,15 +150,5 @@ function boundary_check(p) {
   return false; // No collision
 }
 
-let lastFrameTime = 0;
 
-function animateSprite(currentTime) {
-    if (currentTime - lastFrameTime > 100) { // Change frame every 100ms
-        p.build();
-        lastFrameTime = currentTime;
-    }
-    requestAnimationFrame(animateSprite);
-}
-
-requestAnimationFrame(animateSprite);
 
