@@ -25,8 +25,8 @@ const map=[[1,1,1,1,1,1,1,1,1,1,1,1],
            [1,1,1,1,1,1,1,1,1,1,1,1],]
  const img   = new Image();
  const hero = new Image();
- hero.src="../images/idle.png"
- img.src="../images/wall.jpg"  
+ hero.src="../images/Idle.png";
+ img.src="../images/wall.jpg" ; 
  img.onload = () =>{   
  map.forEach((row,i)=>{
   row.forEach((indi,j)=>{if(indi==1){
@@ -72,7 +72,7 @@ const map=[[1,1,1,1,1,1,1,1,1,1,1,1],
  addEventListener("keydown",(event)=>{if(event.key=="ArrowRight" || event.key=="d"){
   
   p.velocity.x=speed;
-  hero.src="../images/Run.png"
+  hero.src="../images/Run.png";
 
   
   
