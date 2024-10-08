@@ -3,11 +3,13 @@ c=canvas.getContext("2d");
 canvas.width=window.innerWidth;
 canvas.height=window.innerHeight;
 class Walls{
-constructor({position}){
+constructor({position,image}){
   this.position=position;
+  this.image=image;
 }
-build(){c.fillStyle="Black";
-  c.fillRect(this.position.x,this.position.y,40,40);
+build(){/*c.fillStyle="Black";
+  c.fillRect(this.position.x,this.position.y,40,40);*/
+  c.drawImage(this.image,this.position.x,this.position.y)
 
 }}
 const map=[[1,1,1,1,1,1,1,1,1,1,1,1],
@@ -21,11 +23,14 @@ const map=[[1,1,1,1,1,1,1,1,1,1,1,1],
            [1,0,0,0,1,1,1,0,0,0,0,1],
            [1,0,0,0,0,0,0,0,0,0,0,1],
            [1,1,1,1,1,1,1,1,1,1,1,1],]
+ const img   = new Image();
+ img.src="images/wall.jpg"  
+ img.onload = () =>{   
  map.forEach((row,i)=>{
   row.forEach((indi,j)=>{if(indi==1){
-    new Walls({position:{x:400+40*j,y:50+40*i}}).build();
+    new Walls({position:{x:400+40*j,y:50+40*i},image:img}).build();
   }})
- })          
+ })   }       
  class Player{
   constructor({position,velocity}){
     this.position=position;
