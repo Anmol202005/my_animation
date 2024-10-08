@@ -106,24 +106,24 @@ move();
 addEventListener("keyup",(event)=>{
   if(event.key=="ArrowRight" || event.key=="d"){
     p.velocity.x=0;
-    hero.src="../images/idle.png"
+    hero.src="../images/Idle.png"
     
   
     }
    else if(event.key=="ArrowLeft" || event.key=="a"){
     p.velocity.x=0;
-    hero.src="../images/idle.png"
+    hero.src="../images/Idle.png"
     
    }
    else if(event.key=="ArrowUp" || event.key=="w"){
     
     p.velocity.y=0;
-   hero.src="../images/idle.png"
+   hero.src="../images/Idle.png"
    }
    else if(event.key=="ArrowDown" || event.key=="s"){
     
     p.velocity.y=0;
-    hero.src="../images/idle.png"
+    hero.src="../images/Idle.png"
 }})
 
 function boundary_check(p) {
