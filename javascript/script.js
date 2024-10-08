@@ -25,8 +25,8 @@ const map=[[1,1,1,1,1,1,1,1,1,1,1,1],
            [1,1,1,1,1,1,1,1,1,1,1,1],]
  const img   = new Image();
  const hero = new Image();
- hero.src="images/idle.png"
- img.src="images/wall.jpg"  
+ hero.src="../images/idle.png"
+ img.src="../images/wall.jpg"  
  img.onload = () =>{   
  map.forEach((row,i)=>{
   row.forEach((indi,j)=>{if(indi==1){
@@ -72,7 +72,7 @@ const map=[[1,1,1,1,1,1,1,1,1,1,1,1],
  addEventListener("keydown",(event)=>{if(event.key=="ArrowRight" || event.key=="d"){
   
   p.velocity.x=speed;
-  hero.src="images/Run.png"
+  hero.src="../images/Run.png"
 
   
   
@@ -81,18 +81,18 @@ const map=[[1,1,1,1,1,1,1,1,1,1,1,1],
  else if(event.key=="ArrowLeft" || event.key=="a"){
   
   p.velocity.x=-speed;
-  hero.src="images/Run.png"
+  hero.src="../images/Run.png"
   
  }
  else if(event.key=="ArrowUp" || event.key=="w"){
   
   p.velocity.y=-speed;
-  hero.src="images/Run.png"
+  hero.src="../images/Run.png"
  }
  else if(event.key=="ArrowDown" || event.key=="s"){
   
   p.velocity.y=speed;
-  hero.src="images/Run.png"
+  hero.src="../images/Run.png"
  }});
  function move(){
   
@@ -106,24 +106,24 @@ move();
 addEventListener("keyup",(event)=>{
   if(event.key=="ArrowRight" || event.key=="d"){
     p.velocity.x=0;
-    hero.src="images/idle.png"
+    hero.src="../images/idle.png"
     
   
     }
    else if(event.key=="ArrowLeft" || event.key=="a"){
     p.velocity.x=0;
-    hero.src="images/idle.png"
+    hero.src="../images/idle.png"
     
    }
    else if(event.key=="ArrowUp" || event.key=="w"){
     
     p.velocity.y=0;
-   hero.src="images/idle.png"
+   hero.src="../images/idle.png"
    }
    else if(event.key=="ArrowDown" || event.key=="s"){
     
     p.velocity.y=0;
-    hero.src="images/idle.png"
+    hero.src="../images/idle.png"
 }})
 
 function boundary_check(p) {
@@ -149,6 +149,20 @@ function boundary_check(p) {
   }
   return false; // No collision
 }
+
+//  bullet{
+//   constructor({position,velocity,image}){
+//     this.position=position;
+//     this.velocity=velocity;
+//     this.image=image;
+//   }
+//   build(){
+//     c.drawImage(this.image,this.position.x,this.position.y);
+//   }class
+// }
+// const bullet=new Image();
+// bullet.src="images/bullet.png";
+
 
 
 
