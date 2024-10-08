@@ -24,6 +24,8 @@ const map=[[1,1,1,1,1,1,1,1,1,1,1,1],
            [1,0,0,0,0,0,0,0,0,0,0,1],
            [1,1,1,1,1,1,1,1,1,1,1,1],]
  const img   = new Image();
+ const hero = new Image();
+ hero.src="images/idle.png"
  img.src="images/wall.jpg"  
  img.onload = () =>{   
  map.forEach((row,i)=>{
@@ -32,15 +34,24 @@ const map=[[1,1,1,1,1,1,1,1,1,1,1,1],
   }})
  })   }       
  class Player{
-  constructor({position,velocity}){
+  constructor({position,velocity,image}){
     this.position=position;
     this.velocity=velocity;
+    this.image=image;
+    this.f=0;
+    this.c=0;
   }
   build(){
-    c.beginPath();
-    c.fillStyle="red";
-    c.arc(this.position.x,this.position.y,10,0,Math.PI*2);
-    c.fill();
+    // c.beginPath();
+    // c.fillStyle="red";
+    // c.arc(this.position.x,this.position.y,10,0,Math.PI*2);
+    // c.fill();
+    
+    c.drawImage(this.image,40+128*(this.f%6),65,55,65,this.position.x,this.position.y,40,50);
+    
+    this.c=this.c+1;
+    if(this.c%5==0){
+    this.f=this.f+1;}
     
   }
   update(){
@@ -52,12 +63,17 @@ const map=[[1,1,1,1,1,1,1,1,1,1,1,1],
      }
   }
  }
- const p=new Player({position:{x:460,y:110},velocity:{x:0,y:0}});
- p.build();
+ const p=new Player({position:{x:460,y:110},velocity:{x:0,y:0},image:hero});
+ 
+  p.build();
+
+
  var speed=3;
  addEventListener("keydown",(event)=>{if(event.key=="ArrowRight" || event.key=="d"){
   
   p.velocity.x=speed;
+  hero.src="images/Run.png"
+
   
   
 
@@ -65,23 +81,23 @@ const map=[[1,1,1,1,1,1,1,1,1,1,1,1],
  else if(event.key=="ArrowLeft" || event.key=="a"){
   
   p.velocity.x=-speed;
-  
+  hero.src="images/Run.png"
   
  }
  else if(event.key=="ArrowUp" || event.key=="w"){
   
   p.velocity.y=-speed;
-  
+  hero.src="images/Run.png"
  }
  else if(event.key=="ArrowDown" || event.key=="s"){
   
   p.velocity.y=speed;
-  
+  hero.src="images/Run.png"
  }});
  function move(){
   
   if(boundary_check(p)!==true){
-  c.clearRect(p.position.x-10,p.position.y-10,20,20);
+  c.clearRect(p.position.x,p.position.y,40,50);
   p.update();
   p.build();}
   requestAnimationFrame(move);
@@ -90,38 +106,59 @@ move();
 addEventListener("keyup",(event)=>{
   if(event.key=="ArrowRight" || event.key=="d"){
     p.velocity.x=0;
-    
+    hero.src="images/idle.png"
     
   
     }
    else if(event.key=="ArrowLeft" || event.key=="a"){
     p.velocity.x=0;
-    
+    hero.src="images/idle.png"
     
    }
    else if(event.key=="ArrowUp" || event.key=="w"){
     
     p.velocity.y=0;
-   
+   hero.src="images/idle.png"
    }
    else if(event.key=="ArrowDown" || event.key=="s"){
     
     p.velocity.y=0;
-    
+    hero.src="images/idle.png"
 }})
 
-function boundary_check(p){
-  for(let i=0;i<map.length;i++){
-    for(let j=0;j<map[i].length;j++){
-      var boundary_width_max=440+40*j+11;
-      var boundary_width_min=440+40*(j-1)-11;
-      var boundary_height_max=90+40*i+11;
-      var boundary_height_min=90+40*(i-1)-11;
-      if(map[i][j]==1&&p.position.x<=boundary_width_max && p.position.x>=boundary_width_min && p.position.y <=boundary_height_max && p.position.y>=boundary_height_min){
-         return true;
+function boundary_check(p) {
+  for (let i = 0; i < map.length; i++) {
+    for (let j = 0; j < map[i].length; j++) {
+      if (map[i][j] === 1) {
+        const wallX = 400 + 40 * j;
+        const wallY = 50 + 40 * i;
+        const wallWidth = 40;
+        const wallHeight = 40;
+
+        
+        if (
+          p.position.x < wallX + wallWidth && // player left side < wall right side
+          p.position.x + 40 > wallX &&        // player right side > wall left side
+          p.position.y < wallY + wallHeight && // player top side < wall bottom side
+          p.position.y + 50 > wallY            // player bottom side > wall top side
+        ) {
+          return true; // Collision detected
+        }
       }
     }
   }
+  return false; // No collision
 }
 
+let lastFrameTime = 0;
+
+function animateSprite(currentTime) {
+    if (currentTime - lastFrameTime > 100) { // Change frame every 100ms
+        p.build();
+        lastFrameTime = currentTime;
+    }
+    requestAnimationFrame(animateSprite);
+}
+
+requestAnimationFrame(animateSprite);
 
