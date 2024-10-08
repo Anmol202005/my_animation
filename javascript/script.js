@@ -41,39 +41,48 @@ const map=[[1,1,1,1,1,1,1,1,1,1,1,1],
   update(){
     this.position.x+=this.velocity.x;
     this.position.y+=this.velocity.y;
+    if(boundary_check(this)==true){
+      this.position.x-=this.velocity.x;
+      this.position.y-=this.velocity.y;
+     }
   }
  }
  const p=new Player({position:{x:460,y:110},velocity:{x:0,y:0}});
  p.build();
  var speed=3;
  addEventListener("keydown",(event)=>{if(event.key=="ArrowRight" || event.key=="d"){
+  
   p.velocity.x=speed;
   
-  move();
+  
 
   }
  else if(event.key=="ArrowLeft" || event.key=="a"){
+  
   p.velocity.x=-speed;
   
-  move();
+  
  }
  else if(event.key=="ArrowUp" || event.key=="w"){
   
   p.velocity.y=-speed;
-  move();
+  
  }
  else if(event.key=="ArrowDown" || event.key=="s"){
   
   p.velocity.y=speed;
-  move();
+  
  }});
  function move(){
+  
+  if(boundary_check(p)!==true){
   c.clearRect(p.position.x-10,p.position.y-10,20,20);
   p.update();
-  p.build();
-  animationFrameId=requestAnimationFrame(move);
+  p.build();}
+  requestAnimationFrame(move);
 }
-addEventListener("keyup",(event)=>{cancelAnimationFrame(animationFrameId);
+move();
+addEventListener("keyup",(event)=>{
   if(event.key=="ArrowRight" || event.key=="d"){
     p.velocity.x=0;
     
@@ -95,5 +104,19 @@ addEventListener("keyup",(event)=>{cancelAnimationFrame(animationFrameId);
     p.velocity.y=0;
     
 }})
+
+function boundary_check(p){
+  for(let i=0;i<map.length;i++){
+    for(let j=0;j<map[i].length;j++){
+      var boundary_width_max=440+40*j+11;
+      var boundary_width_min=440+40*(j-1)-11;
+      var boundary_height_max=90+40*i+11;
+      var boundary_height_min=90+40*(i-1)-11;
+      if(map[i][j]==1&&p.position.x<=boundary_width_max && p.position.x>=boundary_width_min && p.position.y <=boundary_height_max && p.position.y>=boundary_height_min){
+         return true;
+      }
+    }
+  }
+}
 
 
