@@ -277,6 +277,8 @@ class Villain {
     this.shootInterval = null;
     this.f = 0;
     this.c = 0;
+    this.inter=1000;
+    this.speed=4;
   }
   build() {
     c.drawImage(this.image,30+128*(13-this.f%14),15,60,110, this.position.x, this.position.y, 40, 50);
@@ -300,14 +302,15 @@ class Villain {
     
     this.bullets.push(new Bullet({
       position: { x: this.position.x, y: this.position.y+20 },
-      velocity: { x: Math.cos(angle) * 4, y: Math.sin(angle) * 4 },
+      velocity: { x: Math.cos(angle) * this.speed, y: Math.sin(angle) * this.speed },
       image: villbull
     }));
   }
+  
   startShooting(hero) {
     this.shootInterval = setInterval(() => {
       this.shootAtHero(hero);
-    }, 1000); 
+    }, this.inter); 
   }
   stopShooting() {
     clearInterval(this.shootInterval);
@@ -456,14 +459,24 @@ function won() {
       const j = document.createElement("h1");
       const butt = document.createElement("button");
       butt.className = "butt";
-      butt.innerHTML = "PLAY AGAIN"; 
+      butt.innerHTML = "Next Level"; 
       j.innerHTML = "YOU WON!!"; 
       j.className = "show1"; 
       j.style.zIndex = "1"; 
-      butt.onclick = restart; 
+      butt.onclick = nextlevel; 
       
       
       body.appendChild(j);
       body.appendChild(butt);
   }
+}
+var level=1;
+function nextlevel(){
+  level+=1;
+  const h=document.querySelector(".level").innerHTML=`Current Level : ${level}`;
+  restart();
+  vill.forEach((villain)=>{
+    villain.speed=villain.speed+0.5;
+    villain.time=villain.time-100;
+  })
 }

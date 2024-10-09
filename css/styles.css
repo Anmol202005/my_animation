@@ -84,3 +84,10 @@ canvas{
     font-size: 20px;
     padding-bottom: 15px;
 }
+.level{
+    position: absolute;
+    top: 16%;
+    right: 6%;
+    font-size: 40px;
+    font-family:"Pixelify Sans", sans-serif ;
+}
