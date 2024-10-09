@@ -53,6 +53,7 @@ class Player {
     this.image = image;
     this.f = 0;
     this.c = 0;
+    
   }
 
   build() {
@@ -60,7 +61,8 @@ class Player {
     this.c += 1;
     if (this.c % 5 === 0) {
       this.f += 1;
-    }
+    }this.k=this.k*2;
+  
   }
 
   update() {
@@ -96,7 +98,8 @@ addEventListener("keydown", (event) => {
 });
 
 function move() {
- 
+  death();
+  victory();
   bullets.forEach((bullet, index) => {
     let bulletRemoved = false;
     
@@ -131,7 +134,7 @@ function move() {
       bullet.build();
     }
   });
-  villain.bullets.forEach((bullet, index) => {
+  vill.forEach((villain)=>{villain.bullets.forEach((bullet, index) => {
     let bulletRemoved = false;
 
     for (let i = 0; i < map.length && !bulletRemoved; i++) {
@@ -142,7 +145,7 @@ function move() {
           const wallWidth = 40;
           const wallHeight = 40;
 
-          // Check collision with walls
+          
           if (
             bullet.position.x <= wallX + wallWidth &&
             bullet.position.x + 10 >= wallX &&
@@ -150,29 +153,35 @@ function move() {
             bullet.position.y + 10 >= wallY
           ) {
             c.clearRect(bullet.position.x, bullet.position.y, 10, 10);
-            villain.bullets.splice(index, 1); // Remove villain's bullet
+            villain.bullets.splice(index, 1); 
             bulletRemoved = true;
           }
         }
       }
     }
 
-    // If no collision, update bullet position and render it
+    
     if (!bulletRemoved) {
       c.clearRect(bullet.position.x, bullet.position.y, 10, 10);
       bullet.update();
       bullet.build();
     }
-  });
+  });})
 
 
   
-  c.clearRect(p.position.x, p.position.y, 40, 50);
-  p.update();
-  p.build();
-  c.clearRect(villain.position.x, villain.position.y, 40, 50);
-  villain.update();
-  villain.build();
+  if (p.position.x !== -1000 && p.position.y !== -1000) { 
+    c.clearRect(p.position.x, p.position.y, 40, 50);
+    p.update();
+    p.build();
+  }
+
+  vill.forEach((villain)=>{
+  if (villain.position.x !== -1000 && villain.position.y !== -1000) { 
+    c.clearRect(villain.position.x, villain.position.y, 40, 50);
+    villain.update();
+    villain.build();
+  }})
 
   requestAnimationFrame(move);
 }
@@ -298,7 +307,7 @@ class Villain {
   startShooting(hero) {
     this.shootInterval = setInterval(() => {
       this.shootAtHero(hero);
-    }, 2000); 
+    }, 1000); 
   }
   stopShooting() {
     clearInterval(this.shootInterval);
@@ -306,12 +315,65 @@ class Villain {
 }
 const villainImage = new Image();
 villainImage.src = "../images/villain.png";
-const villain = new Villain({
+const villain1 = new Villain({
   position: { x: 880 - 100, y: 105 }, 
   velocity: { x: 0, y: 0 }, 
   image: villainImage
 });
+const villain2=new Villain({position: { x: 880 - 100, y: 215 }, 
+  velocity: { x: 0, y: 0 }, 
+  image: villainImage
+});
+const villain3=new Villain({position: { x: 880 - 100, y: 405 }, 
+  velocity: { x: 0, y: 0 }, 
+  image: villainImage
+});
+const vill=[villain1,villain2,villain3];
 move();
 villainImage.onload = () => {
-  villain.startShooting(p); 
+  vill.forEach((villain)=>{villain.startShooting(p);});
+   
 };
+
+function victory() {
+  vill.forEach((villain)=>{
+  bullets.forEach((bullet, index) => {
+    if (
+      bullet.position.x < villain.position.x + 40 && 
+      bullet.position.x + 10 > villain.position.x && 
+      bullet.position.y < villain.position.y + 50 && 
+      bullet.position.y + 10 > villain.position.y 
+    ) {
+      
+      
+      bullets.splice(index, 1); 
+      c.clearRect(villain.position.x-10,villain.position.y,50,50);
+      villain.stopShooting();
+      villain.position = { x: -1000, y: -1000 }; 
+      
+    }
+  });})
+}
+
+
+function death() {vill.forEach((villain)=>{
+  villain.bullets.forEach((bullet, index) => {
+    if (
+      bullet.position.x < p.position.x + 40 && 
+      bullet.position.x + 10 > p.position.x && 
+      bullet.position.y < p.position.y + 50 && 
+      bullet.position.y + 10 > p.position.y 
+    ) {
+      
+      
+      
+      hero.src="../images/Dead.png";
+      
+      c.clearRect(p.position.x,p.position.y,40,50);
+      p.position = { x: -1000, y: -1000 };
+      villain.stopShooting();
+      villain.bullets.splice(index, 1); 
+      
+    }
+  });})
+}
