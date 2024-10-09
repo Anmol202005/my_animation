@@ -3,14 +3,14 @@ let c = canvas.getContext("2d");
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 
-// Class for walls
+
 class Walls {
   constructor({ position, image }) {
     this.position = position;
     this.image = image;
   }
   build() {
-    // Draw the image for walls
+    
     c.drawImage(this.image, this.position.x, this.position.y);
   }
 }
@@ -45,7 +45,7 @@ img.onload = () => {
   });
 };
 
-// Class for player
+
 class Player {
   constructor({ position, velocity, image }) {
     this.position = position;
@@ -56,7 +56,7 @@ class Player {
   }
 
   build() {
-    c.drawImage(this.image, 40 + 128 * (this.f % 6), 62, 55, 65, this.position.x, this.position.y, 40, 50);
+    c.drawImage(this.image, 40 + 128 * (this.f % 4), 62, 55, 65, this.position.x, this.position.y, 40, 50);
     this.c += 1;
     if (this.c % 5 === 0) {
       this.f += 1;
@@ -78,7 +78,7 @@ p.build();
 
 let speed = 3;
 
-// Keydown events for movement
+
 addEventListener("keydown", (event) => {
   if (event.key === "ArrowRight" || event.key === "d") {
     p.velocity.x = speed;
@@ -96,7 +96,7 @@ addEventListener("keydown", (event) => {
 });
 
 function move() {
-  // Move bullets and check for collision
+ 
   bullets.forEach((bullet, index) => {
     let bulletRemoved = false;
     
@@ -108,14 +108,14 @@ function move() {
           const wallWidth = 40;
           const wallHeight = 40;
 
-          // Check bullet collision with the wall
+          
           if (
             bullet.position.x <= wallX + wallWidth &&
             bullet.position.x + 10 >= wallX &&
             bullet.position.y <= wallY + wallHeight &&
             bullet.position.y + 10 >= wallY
           ) {
-            // Bullet hits the wall, so remove it from the array
+            
             c.clearRect(bullet.position.x, bullet.position.y, 10, 10);
             bullets.splice(index, 1);
             bulletRemoved = true;
@@ -124,25 +124,62 @@ function move() {
       }
     }
 
-    // If the bullet hasn't been removed, update its position and draw it
+    
     if (!bulletRemoved) {
-      c.clearRect(bullet.position.x, bullet.position.y, 10, 10); // Clear old bullet position
+      c.clearRect(bullet.position.x, bullet.position.y, 10, 10); 
+      bullet.update();
+      bullet.build();
+    }
+  });
+  villain.bullets.forEach((bullet, index) => {
+    let bulletRemoved = false;
+
+    for (let i = 0; i < map.length && !bulletRemoved; i++) {
+      for (let j = 0; j < map[i].length  && !bulletRemoved; j++) {
+        if (map[i][j] === 1) {
+          const wallX = 400 + 40 * j;
+          const wallY = 50 + 40 * i;
+          const wallWidth = 40;
+          const wallHeight = 40;
+
+          // Check collision with walls
+          if (
+            bullet.position.x <= wallX + wallWidth &&
+            bullet.position.x + 10 >= wallX &&
+            bullet.position.y <= wallY + wallHeight &&
+            bullet.position.y + 10 >= wallY
+          ) {
+            c.clearRect(bullet.position.x, bullet.position.y, 10, 10);
+            villain.bullets.splice(index, 1); // Remove villain's bullet
+            bulletRemoved = true;
+          }
+        }
+      }
+    }
+
+    // If no collision, update bullet position and render it
+    if (!bulletRemoved) {
+      c.clearRect(bullet.position.x, bullet.position.y, 10, 10);
       bullet.update();
       bullet.build();
     }
   });
 
-  // Handle player movement
+
+  
   c.clearRect(p.position.x, p.position.y, 40, 50);
   p.update();
   p.build();
+  c.clearRect(villain.position.x, villain.position.y, 40, 50);
+  villain.update();
+  villain.build();
 
   requestAnimationFrame(move);
 }
 
-move();
 
-// Keyup events to stop movement
+
+
 addEventListener("keyup", (event) => {
   if (event.key === "ArrowRight" || event.key === "d") {
     p.velocity.x = 0;
@@ -159,7 +196,7 @@ addEventListener("keyup", (event) => {
   }
 });
 
-// Boundary check function
+
 function boundary_check(p) {
   for (let i = 0; i < map.length; i++) {
     for (let j = 0; j < map[i].length; j++) {
@@ -175,7 +212,7 @@ function boundary_check(p) {
           p.position.y < wallY + wallHeight &&
           p.position.y + 50 > wallY
         ) {
-          return true; // Collision detected
+          return true; 
         }
       }
     }
@@ -183,7 +220,7 @@ function boundary_check(p) {
   return false;
 }
 
-// Class for bullets
+
 class Bullet {
   constructor({ position, velocity, image }) {
     this.position = position;
@@ -197,19 +234,84 @@ class Bullet {
 
   update() {
     this.position.x += this.velocity.x;
+    this.position.y += this.velocity.y;
   }
 }
 
 const bullimg = new Image();
 bullimg.src = "images/bullet.png";
 
-// Shooting event listener
+
+
 addEventListener("keydown", (event) => {
-  if (event.key === " ") {
+  if (event.key === " ") {hero.src = "../images/Shot_2.png";
     bullets.push(new Bullet({
-      position: { x: p.position.x + 40, y: p.position.y + 30 },
-      velocity: { x: 4 },
-      image: bullimg,
+      position: { x: p.position.x + 40, y: p.position.y + 15 },
+      velocity: { x: 4 ,y:0},
+      image: bullimg
+      
     }));
   }
 });
+addEventListener("keyup",(event)=>{
+  if (event.key === " ") {hero.src = "../images/Idle.png";}
+    
+})
+const villbull = new Image();
+villbull.src="../images/fire.png";
+class Villain {
+  constructor({ position, velocity, image }) {
+    this.position = position;
+    this.velocity = velocity;
+    this.image = image;
+    this.bullets = [];
+    this.shootInterval = null;
+    this.f = 0;
+    this.c = 0;
+  }
+  build() {
+    c.drawImage(this.image,30+128*(13-this.f%14),15,60,110, this.position.x, this.position.y, 40, 50);
+    this.c += 1;
+    if (this.c % 10 === 0) {
+      this.f += 1;
+    }
+  }
+
+  update() {
+    this.position.x += this.velocity.x;
+    this.position.y += this.velocity.y;
+    this.build();
+  }
+
+  shootAtHero(hero) {
+    const dx = hero.position.x - this.position.x;
+    const dy = hero.position.y - this.position.y;
+    const angle = Math.atan2(dy, dx);
+
+    
+    this.bullets.push(new Bullet({
+      position: { x: this.position.x, y: this.position.y+20 },
+      velocity: { x: Math.cos(angle) * 4, y: Math.sin(angle) * 4 },
+      image: villbull
+    }));
+  }
+  startShooting(hero) {
+    this.shootInterval = setInterval(() => {
+      this.shootAtHero(hero);
+    }, 2000); 
+  }
+  stopShooting() {
+    clearInterval(this.shootInterval);
+  }
+}
+const villainImage = new Image();
+villainImage.src = "../images/villain.png";
+const villain = new Villain({
+  position: { x: 880 - 100, y: 105 }, 
+  velocity: { x: 0, y: 0 }, 
+  image: villainImage
+});
+move();
+villainImage.onload = () => {
+  villain.startShooting(p); 
+};
