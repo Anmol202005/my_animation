@@ -96,7 +96,7 @@ addEventListener("keydown", (event) => {
     hero.src = "../images/Run.png";
   }
 });
-
+let gameOver = false;
 function move() {
   death();
   victory();
@@ -335,7 +335,7 @@ villainImage.onload = () => {
    
 };
 
-function victory() {
+function victory() {if (gameOver) return;
   vill.forEach((villain)=>{
   bullets.forEach((bullet, index) => {
     if (
@@ -348,15 +348,19 @@ function victory() {
       
       bullets.splice(index, 1); 
       c.clearRect(villain.position.x-10,villain.position.y,50,50);
-      villain.stopShooting();
+      villain.bullets = [];
+      
+      
       villain.position = { x: -1000, y: -1000 }; 
       
+      won();
     }
   });})
 }
 
 
-function death() {vill.forEach((villain)=>{
+function death() {if (gameOver) return;
+  vill.forEach((villain)=>{
   villain.bullets.forEach((bullet, index) => {
     if (
       bullet.position.x < p.position.x + 40 && 
@@ -367,13 +371,94 @@ function death() {vill.forEach((villain)=>{
       
       
       
-      hero.src="../images/Dead.png";
       
+      gameOver=true;
       c.clearRect(p.position.x,p.position.y,40,50);
       p.position = { x: -1000, y: -1000 };
-      villain.stopShooting();
+      
       villain.bullets.splice(index, 1); 
+      const b=document.querySelector("canvas");
+      b.style.filter="blur(5px)";
+      const body=document.querySelector("body");
+      const j=document.createElement("h1");
+      const butt = document.createElement("button");
+      butt.className="butt";
+      butt.innerHTML="PLAY AGAIN"
+      j.innerHTML="YOU LOST!!"
+      j.className="show";
+      j.style.zIndex="1";
+      butt.onclick=restart;
+      body.appendChild(j);
+      body.appendChild(butt);
+
       
     }
+
   });})
+}
+
+function restart() {
+  gameOver=false;
+  c.clearRect(p.position.x,p.position.y,40,50);
+  const remMessage = document.querySelector(".show");
+  const remButton = document.querySelector(".butt");
+  const remme=document.querySelector(".show1");
+  if (remMessage) {
+      remMessage.remove(); 
+  }
+  if (remButton) {
+      remButton.remove(); 
+  }
+  if (remme) {
+    remme.remove(); 
+}
+
+  
+  const b = document.querySelector("canvas");
+  b.style.filter = "blur(0px)"; 
+
+  
+  p.position = { x: 460, y: 110 }; 
+  p.velocity = { x: 0, y: 0 }; 
+
+  
+  villain1.position = { x: 880 - 100, y: 105 }; 
+  villain1.bullets = []; 
+  villain2.position = { x: 880 - 100, y: 215 }; 
+  villain2.bullets = []; 
+  villain3.position = { x: 880 - 100, y: 405 }; 
+  villain3.bullets = []; 
+  
+  
+  
+  bullets.length = 0; 
+
+  
+  
+}
+function won() {
+  
+  const vg = vill.every(villain => villain.position.x === -1000 && villain.position.y === -1000);
+  
+  if (vg) {
+    gameOver = true;
+    
+      const b = document.querySelector("canvas");
+      b.style.filter = "blur(5px)"; 
+      const body = document.querySelector("body");
+      
+      
+      const j = document.createElement("h1");
+      const butt = document.createElement("button");
+      butt.className = "butt";
+      butt.innerHTML = "PLAY AGAIN"; 
+      j.innerHTML = "YOU WON!!"; 
+      j.className = "show1"; 
+      j.style.zIndex = "1"; 
+      butt.onclick = restart; 
+      
+      
+      body.appendChild(j);
+      body.appendChild(butt);
+  }
 }
