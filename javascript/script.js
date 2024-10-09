@@ -96,7 +96,7 @@ addEventListener("keydown", (event) => {
     hero.src = "../images/Run.png";
   }
 });
-let gameOver = false;
+let gameOver = true;
 function move() {
   death();
   victory();
@@ -377,7 +377,7 @@ function death() {if (gameOver) return;
       p.position = { x: -1000, y: -1000 };
       
       villain.bullets.splice(index, 1); 
-      const b=document.querySelector("canvas");
+      const b=document.querySelector(".canvas");
       b.style.filter="blur(5px)";
       const body=document.querySelector("body");
       const j=document.createElement("h1");
@@ -403,6 +403,8 @@ function restart() {
   const remMessage = document.querySelector(".show");
   const remButton = document.querySelector(".butt");
   const remme=document.querySelector(".show1");
+  const oly=document.querySelector(".show2");
+
   if (remMessage) {
       remMessage.remove(); 
   }
@@ -412,9 +414,12 @@ function restart() {
   if (remme) {
     remme.remove(); 
 }
+ if(oly){
+  oly.remove();
+ }
 
   
-  const b = document.querySelector("canvas");
+  const b = document.querySelector(".canvas");
   b.style.filter = "blur(0px)"; 
 
   
@@ -443,7 +448,7 @@ function won() {
   if (vg) {
     gameOver = true;
     
-      const b = document.querySelector("canvas");
+      const b = document.querySelector(".canvas");
       b.style.filter = "blur(5px)"; 
       const body = document.querySelector("body");
       

@@ -3,6 +3,7 @@ canvas{
     background-image: url(../images/images.jpeg);
     background-size: 200px 50px;
     background-repeat: no-re;
+    
 }
 .show{
     position: absolute;
@@ -15,12 +16,14 @@ canvas{
     color: red;
     font-family:"Pixelify Sans", sans-serif;
     
+    
 }
 .butt{
     position: absolute;
     top:35%;
     
     left: 23%;
+    text-align: center;
     
     font-weight: 900;
     font-size: 100px;
@@ -39,5 +42,45 @@ canvas{
     font-size: 100px;
     color: rgb(5, 128, 15);
     font-family:"Pixelify Sans", sans-serif;
+    z-index: 1;
     
+}
+.show2{
+    position: absolute;
+    top:25%;
+    
+    left: 27.5%;
+    
+    font-weight: 900;
+    font-size: 100px;
+    color: rgb(34, 14, 148);
+    font-family:"Pixelify Sans", sans-serif;
+    z-index: 1;
+}
+.canvas{
+    filter: blur(5px);
+}
+.INSTRUCTIONS{
+    border-radius: 10px;
+    border-style: solid;
+    border-color: rgb(129, 126, 122);
+    background-color: rgb(80, 77, 77);
+    color: rgb(252, 247, 247);
+    font-family:"Pixelify Sans", sans-serif ;
+    width: 300px;
+    height:300px;
+    position: absolute;
+    top: 16%;
+    left: 4%;
+}
+.head{
+    text-align: center;
+    font-weight: 900;
+    font-size: 40px;
+}
+.sub-head{
+    text-align: center;
+    font-weight: 700;
+    font-size: 20px;
+    padding-bottom: 15px;
 }
